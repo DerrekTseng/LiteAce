@@ -1,4 +1,4 @@
-package lite.tools;
+package lite.core.component;
 
 import java.io.Closeable;
 import java.io.File;

@@ -88,7 +88,7 @@ class _LiteService {
 		let success = options.success || null;
 		let error = options.error || null;
 
-		let formdata = this._obj2FormData(data);
+		let formdata = LiteService._obj2FormData(data);
 
 		let ajax = new XMLHttpRequest();
 
@@ -157,7 +157,7 @@ class _LiteService {
 		let abort = options.abort || null;
 		let error = options.error || null;
 		let confirm = options.confirm || null;
-
+		
 		let $folder = document.createElement("input");
 		$folder.setAttribute("type", "file");
 		$folder.setAttribute("multiple", "multiple");
@@ -171,7 +171,7 @@ class _LiteService {
 
 			let uploadFileNames = []
 			for (let i = 0; i < $folder.files.length; i++) {
-				formdata.append("file[]", $folder.files[i]);
+				formdata.append("files", $folder.files[i]);
 				uploadFileNames.push($folder.files[i].webkitRelativePath);
 			}
 
@@ -190,9 +190,8 @@ class _LiteService {
 			}
 
 			function _doUpload() {
-				Object.keys(data).forEach(function(key) {
-					formdata.append(key, data[key]);
-				});
+			
+				formdata.append("data", JSON.stringify(data));
 
 				ajax.addEventListener("load", function(event) {
 					try {
@@ -285,7 +284,7 @@ class _LiteService {
 			let uploadFileNames = []
 
 			for (let i = 0; i < $file.files.length; i++) {
-				formdata.append("file[]", $file.files[i]);
+				formdata.append("files", $file.files[i]);
 				uploadFileNames.push($file.files[i].name);
 			}
 
@@ -304,9 +303,7 @@ class _LiteService {
 			}
 
 			function _doUpload() {
-				Object.keys(data).forEach(function(key) {
-					formdata.append(key, data[key]);
-				});
+				formdata.append("data", JSON.stringify(data));
 
 				ajax.addEventListener("load", function(event) {
 					try {
@@ -342,7 +339,9 @@ class _LiteService {
 					if (LiteService._isJsonString(response)) {
 						error(JSON.parse(response), event);
 					} else {
-						error(response, event);
+						if (LiteService._isFunction(error)) {
+							error(response, event);
+						}
 					}
 				}, false);
 

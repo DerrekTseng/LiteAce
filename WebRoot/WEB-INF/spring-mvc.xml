@@ -22,15 +22,26 @@
 	</bean>
 
 	<!-- 啟動Spring MVC的註解功能 -->
-	<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager"/>
+	<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager" conversion-service="conversionService"/>
+	
+	<!-- Response 資料預設為 JSON -->
 	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
 		<property name="favorPathExtension" value="false" />
 	    <property name="defaultContentType" value="application/json"/>
 	</bean>
-
-	<!-- 啟用 Form 表單 Multipart 上傳 -->
+	
+	<!-- 上傳檔案參數轉換 -->
+	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			<list>
+				<bean class="lite.core.component.RequestFileParameterConverter"/>
+			</list>
+		</property>
+	</bean>
+ 
+	<!-- 允許 MULTI-PART 檔案上傳 -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-	    <property name="maxUploadSize" value="100000"/>
+	    <property name="maxUploadSize" value="-1"/>
 	</bean>
 
 	<!-- Spring 的 HTTP 請求內容轉換  -->

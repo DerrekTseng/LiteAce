@@ -11,10 +11,10 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<spring.version>5.3.15</spring.version>
-		<spring.security.version>5.6.1</spring.security.version>
+		<spring.version>5.3.20</spring.version>
+		<spring.security.version>5.7.1</spring.security.version>
 		<jjwt.version>0.9.1</jjwt.version>
-		<aspectj.version>1.9.5</aspectj.version>
+		<aspectj.version>1.9.9.1</aspectj.version>
 		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 		<javax.websocket-api.version>1.1</javax.websocket-api.version>
 		<apache.commons.fileupload.version>1.4</apache.commons.fileupload.version>
@@ -25,7 +25,7 @@
 		<org.jsoup.version>1.14.3</org.jsoup.version>
 		<jasperreports.version>6.19.0</jasperreports.version>
 		<org.apache.poi.version>5.2.2</org.apache.poi.version>
-		<slf4j.version>1.7.35</slf4j.version>
+		<slf4j.version>1.7.36</slf4j.version>
 		<log4j2.version>2.17.1</log4j2.version>
 		<log4jdbc.log4j2.version>1.16</log4jdbc.log4j2.version>
 		<quartz.version>2.3.2</quartz.version>

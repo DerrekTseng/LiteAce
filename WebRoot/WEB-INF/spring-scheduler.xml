@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-autowire="byName" 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation=
+	"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+	
+	<bean id="schedulerFactory" class="org.quartz.impl.StdSchedulerFactory" scope="singleton">
+		<constructor-arg>
+		    <util:properties>
+		        <prop key="org.quartz.threadPool.threadCount">10</prop>
+		    </util:properties>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="scheduler" class="org.quartz.Scheduler" factory-bean="schedulerFactory" factory-method="getScheduler" destroy-method="shutdown" scope="singleton"/>
+	
+</beans>

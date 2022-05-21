@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-autowire="byName" 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation= "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- 資料庫代理 DBProxy 依賴注入 -->
+	<bean id="dbProxy" class="lite.core.mybatis.DBProxy" scope="singleton"/>
+	
+	<!-- 讀取 Property 檔 -->
+	<bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<!-- 依序讀取，後面的 properties 如果有相同的 key 則會取代前面的。 -->
+			<list>
+				<value>/WEB-INF/dataSource.properties</value>
+				<value>file:${catalina.base}/dataSource.properties</value> 
+			</list>
+		</property>
+		<property name="fileEncoding" value="utf-8" />
+	</bean>
+	
+	<!-- 導入的 DataSource XML 檔 -->
+	<import resource="mysql-dataSource.xml" />
+</beans>

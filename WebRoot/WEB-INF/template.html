@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		.lite-template {
+			display: none;
+		}
+		
+		.main-container, .main-content, .page-content {
+			height: 100%;
+		}
+		
+		.clickable:hover {
+			cursor: pointer;
+		}
+		
+		.none-select {
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+		
+		.float_left {
+			float: left;
+		}
+		
+		.float_right {
+			float: right;
+		}
+		
+		.lite-ace-template {
+			display: none
+		}
+		
+		.lite-lite-ace-template-tool-btn i {
+			color: #EFEFEF;
+		}
+		
+		.lite-lite-ace-template-tool-btn i:hover {
+			color: #D6D6D6;
+			cursor: pointer
+		}
+		
+		.lite-ace-template-shade {
+			position: fixed;
+			width: 100%;
+			height: 100vh;
+			opacity: 0.5;
+			background-color: gray;
+			top: 0;
+			left: 0
+		}
+		
+		.lite-ace-template-table-sort {
+			position: relative !important;
+		}
+		
+		.lite-ace-template-table-sort:hover {
+			cursor: pointer
+		}
+		
+		.lite-ace-template-table-sorts {
+			position: absolute;
+			right: 4px;
+		}
+		
+		.s-ico>.ui-icon-asc {
+			display: none
+		}
+		
+		.s-ico>.ui-icon-desc {
+			display: none
+		}
+		
+		.float-left {
+			float: left
+		}
+		
+		.float-right {
+			float: right
+		}
+		
+		table.table>tbody>tr>th {
+			vertical-align: middle;
+		}
+		
+		table.table>thead>tr>th {
+			vertical-align: middle;
+		}
+		
+		.lite-ace-dialog-resizer-bottom {
+			position: absolute;
+			bottom: -20px;
+			left: 0px;
+			height: 24px;
+			width: 100%;
+			touch-action: pan-y;
+		}
+		
+		.lite-ace-dialog-resizer-bottom:hover {
+			cursor: s-resize;
+		}
+		
+		.lite-ace-dialog-resizer-right {
+			position: absolute;
+			top: 0px;
+			right: -20px;
+			height: 100%;
+			width: 24px;
+			touch-action: pan-y;
+		}
+		
+		.lite-ace-dialog-resizer-right:hover {
+			cursor: w-resize;
+		}
+		
+		.lite-ace-dialog-resizer-bottom-right {
+			position: absolute;
+			bottom: -20px;
+			right: -20px;
+			height: 24px;
+			width: 24px;
+			touch-action: pan-y;
+		}
+		
+		.lite-ace-dialog-resizer-bottom-right:hover {
+			cursor: nw-resize
+		}
+		
+		.widget-header:hover {
+			cursor: default
+		}
+		
+		.lite-full-height {
+			height: calc(100vh - 40px);
+		}
+		
+		.widget-header {
+			touch-action: pan-y;
+		}
+		
+		/** LiteAce table style */
+		
+		.lite-ace-table-div>table, .lite-ace-table-div>table>td, .lite-ace-table-div>table>th {
+		    border-radius: 0!important;
+		}
+		.lite-ace-table-div>table {
+		    margin: 0!important;
+		}
+		.lite-ace-table-div>table {
+		    padding: 0!important;
+		}
+		
+		.lite-ace-table-div>table, .lite-ace-table-div>table>tbody>tr>td, .lite-ace-table-div>table>tbody>tr>th, .lite-ace-table-div>table>tfoot>tr>td, .lite-ace-table-div>table>tfoot>tr>th, .lite-ace-table-div>table>thead>tr>td, .lite-ace-table-div>table>thead>tr>th {
+		    border: 1px solid #ddd;
+		}
+		
+		.lite-ace-table-div>table {
+		    width: 100%;
+		    max-width: 100%;
+		}
+		
+		.lite-ace-table-div>table>thead>tr {
+		    color: #707070;
+		    font-weight: 400;
+		    background: repeat-x #F2F2F2;
+		    background-image: -webkit-linear-gradient(top,#F8F8F8 0,#ECECEC 100%);
+		    background-image: -o-linear-gradient(top,#F8F8F8 0,#ECECEC 100%);
+		    background-image: linear-gradient(to bottom,#F8F8F8 0,#ECECEC 100%);
+		    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff8f8f8', endColorstr='#ffececec', GradientType=0);
+		}
+		
+		.lite-ace-table-div>table>thead>tr>th:first-child {
+		    border-left-color: #ddd;
+		}
+		
+		.lite-ace-table-div>table>*>*>* {
+		    vertical-align: middle;
+		}
+		
+		.lite-ace-table-div>table>caption+thead>tr:first-child>td, .lite-ace-table-div>table>caption+thead>tr:first-child>th, .lite-ace-table-div>table>colgroup+thead>tr:first-child>td, .lite-ace-table-div>table>colgroup+thead>tr:first-child>th, .lite-ace-table-div>table>thead:first-child>tr:first-child>td, .lite-ace-table-div>table>thead:first-child>tr:first-child>th {
+		    border-top: 0;
+		}
+		
+		.lite-ace-table-div>table>thead>tr>th {
+		    border-color: #ddd;
+		    font-weight: 700;
+		}
+		.lite-ace-table-div>table>thead>tr>td, .lite-ace-table-div>table>thead>tr>th {
+		    border-bottom-width: 2px;
+		}
+		
+		.lite-ace-table-div>table>thead>tr>th {
+		    border-color: #ddd;
+		    font-weight: 700;
+		}
+		.lite-ace-table-div>table>thead>tr>td, .lite-ace-table-div>table>thead>tr>th {
+		    border-bottom-width: 2px;
+		}
+		
+		.lite-ace-table-div>table>tbody>tr>td, .lite-ace-table-div>table>tbody>tr>th, .lite-ace-table-div>table>tfoot>tr>td, .lite-ace-table-div>table>tfoot>tr>th, .lite-ace-table-div>table>thead>tr>td, .lite-ace-table-div>table>thead>tr>th {
+		    padding: 8px;
+		    line-height: 1.42857143;
+		}
+		
+		.lite-ace-table-div>table, td, th {
+		    border-radius: 0!important;
+		}
+		
+		.lite-ace-table-div>table>tbody>tr:hover {
+		    background-color: #F5F5F5;
+		}
+		
+		.lite-ace-table, .lite-ace-table>td, .lite-ace-table>th {
+		    border-radius: 0!important;
+		}
+		.lite-ace-table {
+		    margin: 0!important;
+		}
+		.lite-ace-table {
+		    padding: 0!important;
+		}
+		
+		.lite-ace-table, .lite-ace-table>tbody>tr>td, .lite-ace-table>tbody>tr>th, .lite-ace-table>tfoot>tr>td, .lite-ace-table>tfoot>tr>th, .lite-ace-table>thead>tr>td, .lite-ace-table>thead>tr>th {
+		    border: 1px solid #ddd;
+		}
+		
+		.lite-ace-table {
+		    width: 100%;
+		    max-width: 100%;
+		}
+		
+		.lite-ace-table>thead>tr {
+		    color: #707070;
+		    font-weight: 400;
+		    background: repeat-x #F2F2F2;
+		    background-image: -webkit-linear-gradient(top,#F8F8F8 0,#ECECEC 100%);
+		    background-image: -o-linear-gradient(top,#F8F8F8 0,#ECECEC 100%);
+		    background-image: linear-gradient(to bottom,#F8F8F8 0,#ECECEC 100%);
+		    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff8f8f8', endColorstr='#ffececec', GradientType=0);
+		}
+		
+		.lite-ace-table>thead>tr>th:first-child {
+		    border-left-color: #ddd;
+		}
+		
+		.lite-ace-table>*>*>* {
+		    vertical-align: middle;
+		}
+		
+		.lite-ace-table>caption+thead>tr:first-child>td, .lite-ace-table>caption+thead>tr:first-child>th, .lite-ace-table>colgroup+thead>tr:first-child>td, .lite-ace-table>colgroup+thead>tr:first-child>th, .lite-ace-table>thead:first-child>tr:first-child>td, .lite-ace-table>thead:first-child>tr:first-child>th {
+		    border-top: 0;
+		}
+		
+		.lite-ace-table>thead>tr>th {
+		    border-color: #ddd;
+		    font-weight: 700;
+		}
+		.lite-ace-table>thead>tr>td, .lite-ace-table>thead>tr>th {
+		    border-bottom-width: 2px;
+		}
+		
+		.lite-ace-table>thead>tr>th {
+		    border-color: #ddd;
+		    font-weight: 700;
+		}
+		.lite-ace-table>thead>tr>td, .lite-ace-table>thead>tr>th {
+		    border-bottom-width: 2px;
+		}
+		
+		.lite-ace-table>tbody>tr>td, .lite-ace-table>tbody>tr>th, .lite-ace-table>tfoot>tr>td, .lite-ace-table>tfoot>tr>th, .lite-ace-table>thead>tr>td, .lite-ace-table>thead>tr>th {
+		    padding: 8px;
+		    line-height: 1.42857143;
+		}
+		
+		.lite-ace-table, td, th {
+		    border-radius: 0!important;
+		}
+		
+		.lite-ace-table>tbody>tr:hover {
+		    background-color: #F5F5F5;
+		}
+	</style>
+</head>
+
+<body>
+	
+	<!-- table sort 按鈕的模板 -->
+	<div id="data-lite-ace-template-table-sort">
+		<span data-lite-ace-template-table-sort class="s-ico lite-ace-template-table-sorts">
+			<span class="ui-grid-ico-sort ui-icon-asc"></span>                                  
+			<span class="ui-grid-ico-sort ui-icon-desc"></span>                                 
+		</span>  
+	</div>
+	
+	<!-- table shader 的模板 -->
+	<table id="data-lite-ace-template-table-shade">
+		<caption data-table-shade style="position:absolute;display:none;top:8px;                                            
+			height:calc(100% - 32px);background:rgba(200,200,200,0.1);z-index:2147483647;width:calc(100% - 40px);">                    
+			<i class="fa fa-spinner fa-spin" style="font-size:64px;position:absolute;left:calc(50% - 64px);top:32px;"></i> 
+		</caption>                                                                                                                    
+	</table>
+	
+	 <!--  table pager 的模板 -->   
+	<div id="data-lite-ace-template-table-pager">
+		<div data-lite-ace-template-table-pager style="margin-left:16px;margin-right:16px">                                          
+			<div class="pull-left" style="height: 48px;">			                                                                  
+				<ul class="pagination middle" style="margin:0px">                                                                     
+					<li data-page-first class="">                                                                                     
+						<span style="height:47px;width: 47px;">                                                                       
+							<i class="ace-icon fa fa-step-backward middle" style="position:absolute;top:16px;left:20px;"></i>         
+						</span>                                                                                                       
+					</li>                                                                                                             
+					<li data-page-previous class="">                                                                                  
+						<span style="height:47px;width: 47px;">                                                                       
+							<i class="ace-icon fa fa-caret-left bigger-140 middle" style="position:absolute;top:14px;left:20px;"></i> 
+						</span>                                                                                                       
+					</li>	                                                                                                          
+					<li data-page-num class="">                                                                                       
+						<span style="width:72px; height: 47px;">                                                                      
+							<select data-page-select style="width:48px"></select>                                                     
+						</span>                                                                                                       
+					</li>		                                                                                                      
+					<li data-page-next class="">                                                                                      
+						<span style="height:47px;width: 47px;">                                                                       
+							<i class="ace-icon fa fa-caret-right bigger-140 middle" style="position:absolute;top:14px;left:20px;"></i>
+						</span>                                                                                                       
+					</li>	                                                                                                          
+					<li data-page-last class="">                                                                                      
+					<span style="height:47px;width: 47px;">                                                                       
+						<i class="ace-icon fa fa-step-forward middle" style="position:absolute;top:16px;left:20px;"></i>          
+						</span>                                                                                                       
+					</li>                                                                                                             
+				</ul>                                                                                                                 
+			</div>                                                                                                                    
+			<div class="pull-right">                                                                                                  
+				<div class="pagination middle" style="margin:0px">                                                                   
+					<div class="row">                                                                                                 
+						<span>單頁</span>                                                                                           
+						<select data-page-size class="form-control" style="width: 60px; height: 30px; display: inline-block;">      
+							<option value="10">10</option>                                                                          
+							<option value="20">20</option>                                                                          
+							<option value="30">30</option>                                                                          
+							<option value="40">40</option>                                                                          
+							<option value="50">50</option>                                                                          
+							<option value="60">60</option>                                                                          
+							<option value="70">70</option>                                                                          
+							<option value="80">80</option>                                                                          
+							<option value="90">90</option>                                                                          
+							<option value="100">100</option>                                                                        
+						</select>                                                                                                   
+						<span>筆</span>                                                                                             
+					</div>                                                                                                          
+					<div class="row">                                                                                               
+						<span>總共</span>                                                                                           
+						<span data-totalCount>123</span>                                                                            
+						<span>筆</span>                                                                                             
+						<span>共</span>                                                                                             
+						<span data-pageCount></span>                                                                                
+						<span>頁</span>                                                                                             
+					</div>	                                                                                                          
+				</div>		                                                                                                          
+			</div>	                                                                                                                  
+		</div>  
+	</div>
+	
+	<!--  Confirm 的模板 -->  
+	<div id="data-lite-ace-confirm">
+		<div>                                                                                                                       
+			<div class="lite-ace-template-shade"></div>                                                                                                    
+			<div data-lite-ace-confirm-content style="top: 0px; left: 0px; right: 0px; bottom: 0px; position: fixed;                                       
+				width: 40%; height: 30vh; background-color: rgb(250, 250, 250); min-width: 240px; min-height: 150px; margin: auto">                        
+				<div class="widget-header" style="word-break: break-all; text-align: center; background: #438EB9; border-color: #438EB9; color: #EFEFEF">
+					<i class="ace-icon fa fa-question-circle"></i>                                                                                         
+					<h5 data-ace-confirm-title class="widget-title"></h5>                                                                                  
+					<div class="widget-toolbar">                                                                                                           
+						<a data-ace-confirm-close class="lite-lite-ace-template-tool-btn">                                                                 
+							<i class="ace-icon fa fa-times bigger-140" style="vertical-align: middle"></i>                                                 
+						</a>                                                                                                                               
+					</div>                                                                                                                                 
+				</div>                                                                                                                                     
+				<div class="widget-body" style="height: calc(30vh - 90px); min-height: 60px; overflow: auto">                                              
+					<div class="widget-main">                                                                                                              
+						<p data-ace-confirm-text style="word-break: break-all" class="bigger-150"></p>                                                     
+					</div>                                                                                                                                 
+					<div class="widget-toolbox padding-8 clearfix" style="bottom: 0px; position: absolute; width: 100%">                                   
+						<button data-ace-confirm-no class="btn btn-xs btn-danger pull-left">                                                               
+							<i class="ace-icon fa fa-times"></i> <span class="bigger-110">取消</span>                                                       
+						</button>                                                                                                                          
+						<button data-ace-confirm-yes class="btn btn-xs btn-success pull-right">                                                            
+							<i class="ace-icon glyphicon glyphicon-ok icon-on-right"></i>                                                                  
+							<span class="bigger-110">確定</span>                                                                                            
+						</button>                                                                                                                          
+					</div>                                                                                                                                 
+				</div>                                                                                                                                     
+			</div>                                                                                                                                         
+		</div>   
+	</div>   
+	                                                                                                          
+	<!-- Alert 的模板 -->  
+	<div id="data-lite-ace-alert">
+		<div>                                                                                                                       
+			<div class="lite-ace-template-shade"></div>                                                                                                  
+				<div data-lite-ace-alert-content style="top: 0px; left: 0px; right: 0px; bottom: 0px; position: fixed; width: 40%; height: 30vh;             
+				background-color: rgb(250, 250, 250); min-width: 240px; min-height: 150px; margin: auto">                                                
+					<div class="widget-header" style="word-break: break-all; text-align: center; background: #438EB9; border-color: #438EB9; color: #EFEFEF">
+						<i class="ace-icon fa fa-exclamation-circle"></i>                                                                                    
+						<h5 data-ace-alert-title class="widget-title"></h5>                                                                                  
+						<div class="widget-toolbar">                                                                                                         
+							<a data-ace-alert-close class="lite-lite-ace-template-tool-btn">                                                                 
+								<i class="ace-icon fa fa-times bigger-140" style="vertical-align: middle"></i>                                               
+							</a>                                                                                                                             
+						</div>                                                                                                                               
+					</div>                                                                                                                                   
+					<div class="widget-body" style="height: calc(30vh - 90px); min-height: 60px; overflow: auto">                                            
+					<div class="widget-main">                                                                                                            
+						<p data-ace-alert-text style="word-break: break-all"></p>                                                                        
+					</div>                                                                                                                               
+					<div class="widget-toolbox padding-8 clearfix" style="bottom: 0px; position: absolute; width: 100%">                                 
+						<button data-ace-alert-ok class="btn btn-xs btn-success pull-right">                                                             
+							<i class="ace-icon glyphicon glyphicon-ok icon-on-right"></i>                                                                
+							<span class="bigger-110">確定</span>                                                                                          
+						</button>                                                                                                                        
+					</div>                                                                                                                               
+				</div>                                                                                                                                   
+			</div>                                                                                                                                       
+		</div>
+	</div>
+	
+	<!--  Dialog 的模板 -->                                                                                                                                          
+	<div id="data-lite-ace-dialog">
+		<div>                                                                                                                                        
+			<div class="lite-ace-template-shade"></div>                                                                                                                    
+			<div data-lite-ace-dialog-content style="border:1px solid #A8A8A8;top: 0px; left: 0px; right: 0px; bottom: 0px; position: fixed; width: 70%; height: 70vh;     
+				background-color: rgb(250, 250, 250); min-width: 240px; min-height: 180px; margin: auto; z-index: 0">                                                      
+				<div class="widget-header" style="background: #438EB9; border-color: #438EB9; color: #EFEFEF;">				                                               
+					<div style="width:100%">                                                                                                                               
+						<div class="bigger-110" style="width: calc( 100% - 72px );white-space: nowrap;padding: 8px; overflow: hidden; display: inline-block;               
+							height: 40px; text-align: center; vertical-align: middle;">                                                                                    
+							<i data-ace-dialog-icon></i>                                                                                                                   
+							<span class="bigger-110" data-ace-dialog-title ></span>                                                                                        
+						</div>                                                                                                                                             
+											                                                                                                                               
+						<div style="width:56px; display: inline-block;margin-left:4px; text-align: right">                                                                 
+							<span data-ace-dialog-size data-ace-dialog-min style="display: none" class="lite-lite-ace-template-tool-btn">                                  
+								<i class="ace-icon fas fa-compress bigger-150" style="vertical-align: middle"></i>							                               
+							</span>                                                                                                                                        
+							<span data-ace-dialog-size data-ace-dialog-max class="lite-lite-ace-template-tool-btn">                                                        
+								<i class="ace-icon fas fa-expand bigger-150"	style="vertical-align: middle"></i>                                                        
+							</span>                                                                                                                                        
+							&ensp;						                                                                                                                   
+							<span data-ace-dialog-close class="lite-lite-ace-template-tool-btn">                                                                           
+								<i class="ace-icon fa fa-times bigger-200" style="vertical-align: middle"></i>                                                             
+							</span>                                                                                                                                        
+						</div>	                                                                                                                                           
+					</div>                                                                                                                                                 
+				</div>                                                                                                                                                     
+				<div data-lite-ace-dialog-body class="widget-body" style="border-bottom:1px solid #A8A8A8; height: calc( 100% - 40px); min-height: 60px; overflow: hidden">
+					<iframe style="height: 100%; min-height: 60px; overflow: auto; width: 100%; border: 0px"></iframe>                                                     
+				</div>                                                                                                                                                     
+				<div class="lite-ace-dialog-resizer-bottom"></div>			                                                                                               
+				<div class="lite-ace-dialog-resizer-right"></div>                                                                                                          
+				<div class="lite-ace-dialog-resizer-bottom-right"></div>                                                                                                   
+			</div>                                                                                                                                                         
+		</div> 
+	</div>
+	
+	<!--  Info 的模板 -->                                                                                                                                                            
+	<div id="data-lite-ace-info">
+		<div class="alert alert-info" style="z-index: 2147483647; border-radius: 16px; position: fixed; top: 60px;
+			left: 0px; right: 0px; max-width: 60%; margin: auto; min-width: 240px">                                                   
+			<button type="button" class="close" data-dismiss="alert">                                                                 
+				<i class="ace-icon fa fa-times"></i>                                                                                  
+			</button>                                                                                                                 
+			<p style="word-break: break-all">                                                                                         
+				<i class="ace-icon fa fa-info-circle"></i> 
+				&ensp;                                                                           
+				<span data-lite-text></span>                                                                                          
+			</p>                                                                                                                      
+		</div> 
+	</div>
+	                                                                                                                        
+	<!-- Success 的模板 -->  
+	<div id="data-lite-ace-success">
+		<div class="alert alert-success" style="z-index: 2147483647; border-radius: 16px; position: fixed; top: 60px;
+			left: 0px; right: 0px; max-width: 60%; margin: auto; min-width: 240px">                                                         
+			<button type="button" class="close" data-dismiss="alert">                                                                       
+				<i class="ace-icon fa fa-times"></i>                                                                                        
+			</button>                                                                                                                       
+			<p style="word-break: break-all">                                                                                               
+				<i class="ace-icon glyphicon glyphicon-ok"></i>        
+				&ensp;                                                                      
+				<span data-lite-text></span>                                                                                                
+			</p>                                                                                                                            
+		</div>
+	</div>
+	
+	<!-- Warning 的模板 -->
+	<div id="data-lite-ace-warning">
+		<div class="alert alert-warning" style="z-index: 2147483647; border-radius: 16px; position: fixed; top: 60px;
+			left: 0px; right: 0px; max-width: 60%; margin: auto; min-width: 240px">                                                         
+			<button type="button" class="close" data-dismiss="alert">                                                                       
+				<i class="ace-icon fa fa-times"></i>                                                                                        
+			</button>                                                                                                                       
+			<p style="word-break: break-all">                                                                                               
+				<i class="ace-icon fa fa-exclamation-circle"></i>   
+				&ensp;                                                                         
+				<span data-lite-text></span>                                                                                                
+			</p>                                                                                                                            
+		</div> 
+	</div>   
+	                                                                                                                            
+	<!-- Error 的模板 -->
+	<div id="data-lite-ace-error">
+		<div class="alert alert-danger"	style="z-index: 2147483647; border-radius: 16px; position: fixed; top: 60px;
+			left: 0px; right: 0px; max-width: 60%; margin: auto; min-width: 240px">                                                         
+			<button type="button" class="close" data-dismiss="alert">                                                                       
+				<i class="ace-icon fa fa-times"></i>                                                                                        
+			</button>                                                                                                                       
+			<p style="word-break: break-all">                                                                                               
+				<i class="ace-icon fa fa-exclamation-triangle "></i>    
+				&ensp;                                                                     
+				<span data-lite-text></span>                                                                                                
+			</p>                                                                                                                            
+		</div>  
+	</div>  
+	                                                                          
+</body>
+</html>

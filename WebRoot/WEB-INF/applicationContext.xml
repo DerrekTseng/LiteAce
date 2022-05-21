@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-autowire="byName" 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation=
+	"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:spring-configured />
+	
+	<!-- 使用註解的包，包括子集 -->
+	<context:component-scan base-package="lite" />
+	
+	<!-- Spring 應用程式啟動和結束的事件監聽器 -->
+	<bean id="springApplicationListener" class="lite.core.listeners.SpringApplicationListener">
+		<property name="log4j2ConfigLocation" value="/WEB-INF/log4j2.xml"/>
+	</bean>
+	
+	<import resource="spring-data.xml" />
+	<import resource="spring-mvc.xml" />
+	<import resource="spring-security.xml" />
+	<import resource="spring-aop.xml" />
+	<import resource="spring-scheduler.xml" />
+	
+</beans>

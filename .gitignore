@@ -1,0 +1,6 @@
+/Servers/
+build
+target
+/.metadata/
+*.class
+/bin/

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-autowire="byName"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation=
+	"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	 http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd ">
+	
+	<!-- DBProxy 內的 @Resource(name = "mysql_db") MybatisUtil -->
+	<bean id="mysql_db" class="lite.core.mybatis.MybatisUtil">
+		<property name="sqlSessionTemplate" ref="mysql_sqlSession" />
+	</bean>
+	
+	<!-- 連線資訊 -->
+    <bean id="mysql_dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"> 
+        <property name="driverClassName"> 
+            <value>net.sf.log4jdbc.sql.jdbcapi.DriverSpy</value> 
+        </property> 
+        <property name="url"> 
+             <value>${mysql.url}</value>  
+        </property> 
+        <property name="username"> 
+             <value>${mysql.username}</value>  
+        </property> 
+        <property name="password"> 
+             <value>${mysql.password}</value>  
+        </property> 
+     </bean> 
+	
+	<!-- myBatis 設定 -->
+	<bean id="mysql_sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="mysql_dataSource" />
+		<property name="configLocation" value="/WEB-INF/mybatis-configuration.xml" />  	<!-- mybatis 參數檔 -->
+		<property name="mapperLocations">		<!-- mybats sql xml 存放路徑 -->
+			<list>
+				<value>/WEB-INF/mybatis-mapper/*.xml</value>
+				<value>/WEB-INF/mybatis-mapper/mysql/*.xml</value>
+				<value>/WEB-INF/mybatis-mapper/mysql/**/*.xml</value>
+			</list>
+		</property>
+	</bean>
+	 
+	<!-- 啟動聲明式 @Transactional 注解 ，當函式有@Transactional 注解時，則啟動資料庫交易 -->
+	<!-- 當函式丟出 Exception 時會自動 rollback，成功完成時則自動 commit -->
+	<tx:annotation-driven transaction-manager="mysql_springTransactionManager" />
+	
+	<!-- 資料庫交易 管理 --> 
+    <bean id="mysql_springTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    	<property name="dataSource" ref="mysql_dataSource" />
+	</bean>
+	
+	<!-- 資料庫 Session --> 
+	<bean id="mysql_sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="mysql_sqlSessionFactory" />
+	</bean>
+	
+</beans>

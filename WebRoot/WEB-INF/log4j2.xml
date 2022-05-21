@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+
+	<Properties>
+		<Property name="project">LitePlatform</Property>
+		<Property name="date">%d{yyyy-MM-dd}</Property>
+		<Property name="destination">${sys:catalina.base}/logs</Property>
+		
+		<Property name="pattern.web">[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%p] [%X{client}] (%F:%M:%L) - %m%n</Property>
+		<Property name="pattern.scheduler">[%d{yyy-MM-dd HH:mm:ss.SSS}] [%p] (%F:%M:%L) - %m%n</Property>
+		
+		<Property name="routing.init">
+			<![CDATA[
+				if(logEvent.getContextMap().containsKey("jobid")) {
+					 "scheduler";
+				} else {
+					 "web";
+				}
+			]]>
+		</Property>
+	</Properties>
+
+	<Appenders>
+	
+		<Routing name="ConsoleLogRouting">
+			<Routes>
+				<Script name="RoutingInit" language="JavaScript">${routing.init}</Script>
+				<Route key="web">
+					<Console name="WebConsoleLogRouting" target="SYSTEM_OUT">
+						<PatternLayout>
+							<Pattern>${pattern.web}</Pattern>
+						</PatternLayout>
+					</Console>
+				</Route>
+				<Route key="scheduler">
+					<Console name="SchedulerConsoleLogRouting" target="SYSTEM_OUT">
+						<PatternLayout>
+							<Pattern>${pattern.scheduler}</Pattern>
+						</PatternLayout>
+					</Console>
+				</Route>
+			</Routes>
+		</Routing>
+		
+		<Routing name="FileLogRouting">
+			<Routes>
+				<Script name="RoutingInit" language="JavaScript">${routing.init}</Script>
+				<Route key="web">
+					<RollingFile name="WebFileLogRouting"
+						immediateFlush="true"
+						fileName="${destination}/${project}.log"
+						filePattern="${destination}/${project}.${date}.log">
+						<PatternLayout>
+							<Pattern>${pattern.web}</Pattern>
+						</PatternLayout>
+						<Policies>
+							<TimeBasedTriggeringPolicy />
+						</Policies>
+						<DefaultRolloverStrategy>
+							<Delete basePath="${destination}/" maxDepth="1">
+								<IfLastModified age="P30D" />
+							</Delete>
+						</DefaultRolloverStrategy>
+					</RollingFile>
+				</Route>
+				<Route key="scheduler">
+					<RollingFile name="SchedulerFileLogRouting" 
+						immediateFlush="true"
+						fileName="${destination}/${ctx:jobid}.log" 
+						filePattern="${destination}/${ctx:jobid}.${date}.log">
+						<PatternLayout>
+							<Pattern>${pattern.scheduler}</Pattern>
+						</PatternLayout>
+						<Policies>
+							<TimeBasedTriggeringPolicy />
+						</Policies>
+					</RollingFile>
+				</Route>
+			</Routes>
+		</Routing>   
+		
+	</Appenders>
+
+	<Loggers>
+
+		<logger name="jdbc.connection" level="INFO" additivity="false">
+			<appender-ref ref="ConsoleLogRouting" />
+			<appender-ref ref="FileLogRouting" />
+		</logger>
+
+		<logger name="jdbc.audit" level="ERROR" additivity="false">
+			<appender-ref ref="ConsoleLogRouting" />
+			<appender-ref ref="FileLogRouting" />
+		</logger>
+
+		<logger name="jdbc.sqlonly" level="INFO" additivity="false">
+			<appender-ref ref="ConsoleLogRouting" />
+			<appender-ref ref="FileLogRouting" />
+		</logger>
+
+		<logger name="jdbc.sqltiming" level="ERROR" additivity="false">
+			<appender-ref ref="ConsoleLogRouting" />
+			<appender-ref ref="FileLogRouting" />
+		</logger>
+
+		<logger name="jdbc.resultset" level="ERROR" additivity="false">
+			<appender-ref ref="ConsoleLogRouting" />
+			<appender-ref ref="FileLogRouting" />
+		</logger>
+
+		<logger name="jdbc.resultsettable" level="ERROR" additivity="false">
+			<appender-ref ref="ConsoleLogRouting" />
+			<appender-ref ref="FileLogRouting" />
+		</logger>
+
+		<logger name="log4jdbc.debug" level="ERROR" additivity="false">
+			<appender-ref ref="ConsoleLogRouting" />
+			<appender-ref ref="FileLogRouting" />
+		</logger>
+
+		<Root level="INFO">
+			<AppenderRef ref="ConsoleLogRouting" />
+			<AppenderRef ref="FileLogRouting" />
+		</Root>
+
+	</Loggers>
+	
+</Configuration>

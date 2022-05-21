@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-autowire="byName"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation=
+	"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+	
+	<!-- Spring AOP -->
+	<aop:aspectj-autoproxy/>
+
+	<bean id="controllerInterceptor" class="lite.core.aop.ControllerInterceptor"/>
+	<bean id="serviceInterceptor" class="lite.core.aop.ServiceInterceptor"/>
+	
+	<aop:config>
+		<aop:aspect ref="controllerInterceptor">
+			<aop:pointcut id="controllerIntercept" expression="(execution(public * lite.*.controller.*.*(..)))"/>
+			<aop:before pointcut-ref="controllerIntercept" method="before"/>
+			<aop:after pointcut-ref="controllerIntercept" method="after"/>
+			<aop:after-returning pointcut-ref="controllerIntercept" returning="returnValue" method="afterReturning"/>
+			<aop:after-throwing pointcut-ref="controllerIntercept" throwing="throwable" method="afterThrowing"/>
+		</aop:aspect>
+		<aop:aspect ref="serviceInterceptor">
+			<aop:pointcut id="serviceIntercept" expression="(execution(public * lite.*.service.*.*(..)))"/>
+			<aop:before pointcut-ref="serviceIntercept" method="before"/>
+			<aop:after pointcut-ref="serviceIntercept" method="after"/>
+			<aop:after-returning pointcut-ref="serviceIntercept" returning="returnValue" method="afterReturning"/>
+			<aop:after-throwing pointcut-ref="serviceIntercept" throwing="throwable" method="afterThrowing"/>
+		</aop:aspect>
+	</aop:config>
+	
+</beans>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-autowire="byName" 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation=
+	"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+	
+	<!-- 排除首頁 -->
+	<security:http pattern="/" security="none" />
+	
+	<!-- 排除登入API -->
+	<security:http pattern="/doLogin" security="none" />
+	
+	<!-- 排除開發者頁面 -->
+	<security:http pattern="/developer/**" security="none" />
+	
+	<!-- 排除資源檔 -->
+	<security:http pattern="/resource/**" security="none" />
+	
+	<!-- 其餘目錄都必須要驗證 -->
+	<security:http auto-config="true">
+		<security:intercept-url pattern="/**" />
+		<security:csrf disabled="true"/>
+		<security:custom-filter before="BASIC_AUTH_FILTER" ref="authenticateProcessingFilter"/>
+		<security:headers>
+			<security:frame-options disabled="true"/>
+		</security:headers>
+	</security:http>
+  
+	<bean id="authenticateProcessingFilter" class="lite.core.security.AuthenticateProcessingFilter">
+		<constructor-arg type="java.lang.String">
+			<value>/**</value>
+		</constructor-arg>
+		<property name="authenticationManager" ref="authenticationManager" />
+	</bean>
+	
+	<security:authentication-manager alias="authenticationManager"/>
+	
+	<!-- 防火牆 -->
+	<security:http-firewall ref="httpFirewall"/>
+	<bean id="httpFirewall" class="org.springframework.security.web.firewall.StrictHttpFirewall">
+		<property name="allowSemicolon" value="true"/>
+	</bean>
+	
+</beans>

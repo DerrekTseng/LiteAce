@@ -3,6 +3,8 @@
 JKD版本 : 1.8  
 開發環境 : Eclipse  
   
+專案匯入方式  
+  左上角 File > Import > Git > Projects from Git(with smart import) > Clone URI
   
 啟動伺服器後  
 首頁網址:localhost:8080/LiteAce  

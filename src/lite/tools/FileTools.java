@@ -845,16 +845,24 @@ public class FileTools {
 
 	}
 
-	public static long getLastModifiedTime(String filePath) throws IOException {
-		File file = new File(filePath);
-		BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
-		return attr.lastAccessTime().toMillis();
+	public static long getLastModifiedTime(String filePath) {
+		try {
+			File file = new File(filePath);
+			BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+			return attr.lastModifiedTime().toMillis();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-	public static long lastAccessTime(String filePath) throws IOException {
-		File file = new File(filePath);
-		BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
-		return attr.lastAccessTime().toMillis();
+	public static long lastAccessTime(String filePath) {
+		try {
+			File file = new File(filePath);
+			BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+			return attr.lastAccessTime().toMillis();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public static boolean isValidFilePath(String path) {

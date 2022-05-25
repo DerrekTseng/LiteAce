@@ -76,6 +76,7 @@ public class AuthenticateProcessingFilter extends AbstractAuthenticationProcessi
 		SecurityContext context = SecurityContextHolder.getContext();
 		context.setAuthentication(authResult);
 		chain.doFilter(request, response);
+		ThreadContext.clearMap();
 	}
 
 }

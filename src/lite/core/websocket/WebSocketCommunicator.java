@@ -3,7 +3,6 @@ package lite.core.websocket;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.socket.WebSocketSession;
 
 import lite.system.vo.UserProfile;
 
@@ -27,7 +26,9 @@ public abstract class WebSocketCommunicator<T> {
 	 */
 	public final void sendToClient(T data) {
 		WebSocketEndpoint endpoint = this.getClass().getDeclaredAnnotation(WebSocketEndpoint.class);
-		for (WebSocketSession session : webSocketFactory.getSessions()) {
+		webSocketFactory.getSessions().entrySet().stream().filter(entry -> {
+			return entry.getValue().contains(endpoint.value());
+		}).map(entry -> entry.getKey()).forEach(session -> {
 			UserProfile userProfile = (UserProfile) session.getAttributes().get("userProfile");
 			if (sendToClientFilter(userProfile, data)) {
 				try {
@@ -36,7 +37,7 @@ public abstract class WebSocketCommunicator<T> {
 
 				}
 			}
-		}
+		});
 	}
 
 	/**

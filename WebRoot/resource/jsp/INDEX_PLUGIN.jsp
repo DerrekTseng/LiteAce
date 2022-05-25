@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<script	src="<c:url value='/resource/script/LiteWebSocket.js' />"></script>
-
 <%-- index.jsp 專用的畫面插件 --%>
 <%-- 上傳檔案元件 --%>
 <script type="text/javascript">

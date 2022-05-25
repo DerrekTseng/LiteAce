@@ -1,5 +1,7 @@
 package lite.core.websocket;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.apache.logging.log4j.ThreadContext;
@@ -14,10 +16,10 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lite.core.component.MapTypeReference;
 import lite.system.vo.UserProfile;
 
 @Component
@@ -32,7 +34,7 @@ public class WebSocketMainHandler extends TextWebSocketHandler {
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-		webSocketFactory.getSessions().add(session);
+		webSocketFactory.getSessions().put(session, Collections.synchronizedSet(new HashSet<>()));
 	}
 
 	@Override
@@ -51,22 +53,28 @@ public class WebSocketMainHandler extends TextWebSocketHandler {
 		JsonParser parser = factory.createParser(payload);
 		JsonNode actualObj = objectMapper.readTree(parser);
 
-		String url = actualObj.get("url").asText();
-		JsonNode data = actualObj.get("data");
+		String action = actualObj.get("action").asText();
 
-		Map<String, Object> map = objectMapper.convertValue(data, new TypeReferenceImpl());
+		if (action.equals("msg")) {
 
-		WebSocketCommunicator<?> receiver = webSocketFactory.getCommunicator(url);
-		if (receiver != null) {
-			Object result = receiver.receiveFromClient(userProfile, map);
-			if (result != null) {
-				webSocketFactory.sendMessage(session, url, result);
+			String url = actualObj.get("url").asText();
+			JsonNode data = actualObj.get("data");
+			Map<String, Object> map = objectMapper.convertValue(data, new MapTypeReference());
+
+			WebSocketCommunicator<?> receiver = webSocketFactory.getCommunicator(url);
+			if (receiver != null) {
+				Object result = receiver.receiveFromClient(userProfile, map);
+				if (result != null) {
+					webSocketFactory.sendMessage(session, url, result);
+				}
+			}
+
+		} else if (action.equals("register")) {
+			String urls = actualObj.get("urls").asText();
+			for (String url : urls.split(",")) {
+				webSocketFactory.getSessions().get(session).add(url);
 			}
 		}
-	}
-
-	private static class TypeReferenceImpl extends TypeReference<Map<String, Object>> {
-		// Jackson convertValue 型別
 	}
 
 	@Override

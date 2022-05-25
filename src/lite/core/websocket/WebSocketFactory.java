@@ -2,8 +2,6 @@ package lite.core.websocket;
 
 import java.util.AbstractMap;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,7 +25,7 @@ public class WebSocketFactory {
 
 	private static final ConcurrentHashMap<String, WebSocketCommunicator<?>> communicators = new ConcurrentHashMap<String, WebSocketCommunicator<?>>();
 
-	private static final Set<WebSocketSession> sessions = Collections.synchronizedSet(new HashSet<>());
+	private static final ConcurrentHashMap<WebSocketSession, Set<String>> sessions = new ConcurrentHashMap<>();
 
 	@Autowired
 	ApplicationContext applicationContext;
@@ -57,7 +55,7 @@ public class WebSocketFactory {
 		return communicators.getOrDefault(url, null);
 	}
 
-	public Set<WebSocketSession> getSessions() {
+	public ConcurrentHashMap<WebSocketSession, Set<String>> getSessions() {
 		return sessions;
 	}
 

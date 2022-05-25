@@ -8,7 +8,8 @@
 	</title>
 	
 	<%@include file="/resource/jsp/PAGE_HEAD.jsp" %>
-	<%@include file="/resource/jsp/WebSocket.jsp" %>
+	
+	<script	src="<c:url value='/resource/script/LiteWebSocket.js' />"></script>
 	
 	<sitemesh:write property="head" />
 

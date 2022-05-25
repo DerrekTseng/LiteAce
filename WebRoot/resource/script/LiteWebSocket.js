@@ -71,8 +71,6 @@ class LiteWebSocket {
 		this.websocket = new WebSocket(this.connectionString);
 
 		this.websocket.addEventListener('open', event => {
-		
-			LiteAce.logger.info("WebSocket" + $this.logName + "connected.");
 
 			if (LiteService._isFunction($this.onOpen)) {
 				$this.onOpen(event);
@@ -88,9 +86,6 @@ class LiteWebSocket {
 		});
 
 		this.websocket.addEventListener('error', event => {
-			if($this.retry != 0){
-				LiteAce.logger.error("WebSocket" + $this.logName + "connection failed, will retry in " + $this.retry + " seconds...");
-			}
 			if (LiteService._isFunction($this.onError)) {
 				$this.onError(event);
 			}
@@ -181,9 +176,16 @@ LiteAce.ws._onMessage = function(responseBean) {
 	if (LiteAce.ws._receivers.has(url)) {
 		let receiverCallback = LiteAce.ws._receivers.get(url);
 		if(LiteAce._isFunction(receiverCallback)){
-			LiteAce.ws._receivers.get(url)(data);
+			receiverCallback(data);
 		}
 	}
+};
+
+LiteAce.ws._onOpen = function() {
+	LiteAce.ws._connection.send({
+		action : 'register',
+		urls: Array.from(LiteAce.ws._receivers.keys()).join(",")
+	});
 };
 
 // 連線的初始值，避免未連線成功出現 undefined 錯誤
@@ -213,6 +215,10 @@ LiteAce.ws.addReceiver = function(url = "", callback = function() { }) {
 		throw "callback must be a function";
 	}
 	LiteAce.ws._receivers.set(url, callback);
+	LiteAce.ws._connection.send({
+		action : 'register',
+		urls: url
+	});
 }
 
 /**
@@ -227,6 +233,7 @@ LiteAce.ws.send = function(url = "", data = {}) {
 		throw "url not exists in receivers.";
 	}
 	LiteAce.ws._connection.send({
+		action : 'msg',
 		url: url,
 		data: data
 	});
@@ -248,11 +255,15 @@ LiteAce.ws.open = function() {
 	if (LiteAce.ws._connection.initialized) {
 		throw "connection is already initialized";
 	}
+	
+	LiteAce.ws._receivers.clear();
 
 	LiteAce.ws._connection = new LiteWebSocket({
 		name: "defalut-connection",
 		url: "ws",
-		onMessage: LiteAce.ws._onMessage
+		onMessage: LiteAce.ws._onMessage,
+		onOpen : LiteAce.ws._onOpen,
+		retry : 0
 	});
 	
 }

@@ -116,10 +116,11 @@ public class UserService {
 
 		name = name.toLowerCase();
 
-		// String pwd_base64 = CryptoTools.MD5(pwd);
-		// 或 String pwd_base64 = CryptoTools.SHA256(pwd);
+		// String pwd_hash = CryptoTools.oneWayHash.MD5(pwd);
+		// 或 String pwd_hash = CryptoTools.oneWayHash.SHA256(pwd);
+		// 或 String pwd_hash = CryptoTools.oneWayHash.SHA512(pwd);
 
-		// 檢核資料庫 name 和 pwd_base64 是否正確
+		// 檢核資料庫 name 和 pwd_hash 是否正確
 
 		Integer userRowid = 0;
 

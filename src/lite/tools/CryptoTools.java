@@ -1,10 +1,8 @@
 package lite.tools;
 
-import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -94,36 +92,6 @@ public class CryptoTools {
 		return Result;
 	}
 
-	/**
-	 * 對字符串md5加密 空字串會回空字串
-	 *
-	 * @param str
-	 * @return
-	 */
-	public static String MD5(String str) {
-		try {
-			return hashString(str, MessageDigest.getInstance("MD5"));
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public static String SHA256(String str) {
-		try {
-			return hashString(str, MessageDigest.getInstance("SHA-256"));
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public static String hashString(String str, MessageDigest messageDigest) {
-		if (str == null || "".equals(str)) {
-			return "";
-		}
-		messageDigest.update(str.getBytes());
-		return new BigInteger(1, messageDigest.digest()).toString(16);
-	}
-
 	public static String bytesToString(byte[] bytes) {
 		return DatatypeConverter.printHexBinary(bytes);
 	}
@@ -132,7 +100,37 @@ public class CryptoTools {
 		return DatatypeConverter.parseHexBinary(string);
 	}
 
-	public static String genUUID() {
-		return UUID.randomUUID().toString();
+	/**
+	 * 單方向加密 無法反解密
+	 * 
+	 * @author DerrekTseng
+	 */
+	public static class oneWayHash {
+
+		public static String MD5(String str) {
+			return doHash(str, "MD5");
+		}
+
+		public static String SHA256(String str) {
+			return doHash(str, "SHA-256");
+		}
+
+		public static String SHA512(String str) {
+			return doHash(str, "SHA-512");
+		}
+
+		private static String doHash(String str, String algorithm) {
+			try {
+				if (str == null || "".equals(str)) {
+					return "";
+				}
+				MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
+				messageDigest.update(str.getBytes());
+				return bytesToString(messageDigest.digest());
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+
 	}
 }

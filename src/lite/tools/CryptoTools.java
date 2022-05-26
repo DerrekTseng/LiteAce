@@ -100,24 +100,28 @@ public class CryptoTools {
 	 * @param str
 	 * @return
 	 */
-	public static String getMD5(String str) {
-		if ("".equals(str) || str == null) {
+	public static String MD5(String str) {
+		try {
+			return hashString(str, MessageDigest.getInstance("MD5"));
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static String SHA256(String str) {
+		try {
+			return hashString(str, MessageDigest.getInstance("SHA-256"));
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static String hashString(String str, MessageDigest messageDigest) {
+		if (str == null || "".equals(str)) {
 			return "";
 		}
-		String ret = null;
-		try {
-			// 生成一個MD5加密計算摘要
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			// 計算md5函數
-			md.update(str.getBytes());
-			// digest()最後確定返回md5 hash值，返回值為8為字符串。因為md5 hash值是16位的hex值，實際上就是8位的字符
-			// BigInteger函數則將8位的字符串轉換成16位hex值，用字符串來表示；得到字符串形式的hash值
-			ret = new BigInteger(1, md.digest()).toString(16);
-		} catch (Exception e) {
-			// throw new SpeedException("MD5加密出現錯誤");
-			ExceptionTools.printAllStackTrace(e);
-		}
-		return ret;
+		messageDigest.update(str.getBytes());
+		return new BigInteger(1, messageDigest.digest()).toString(16);
 	}
 
 	public static String bytesToString(byte[] bytes) {

@@ -92,9 +92,6 @@ public class ObjectSerializer {
 	 * @return
 	 */
 	public static boolean isSerializabled(Object object) {
-		if (object instanceof java.io.Serializable) {
-			return true;
-		}
-		return false;
+		return object instanceof java.io.Serializable;
 	}
 }

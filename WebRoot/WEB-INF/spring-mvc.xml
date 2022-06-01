@@ -12,6 +12,7 @@
 	
 	<!-- JS / CSS 資源 -->
 	<mvc:resources mapping="/resource/**" location="/resource/" />
+	<mvc:resources mapping="/favicon.ico" location="/favicon.ico" />
 	
 	<!-- 視圖解析器 -->
 	<bean id="viewResolver"	class="org.springframework.web.servlet.view.InternalResourceViewResolver">

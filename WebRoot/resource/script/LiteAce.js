@@ -117,7 +117,7 @@ class _LiteAce {
 				}
 			},
 			error: function(response, event, statusText) {
-				LiteAce.logger.error(statusText);
+				LiteAce.logger.error(statusText + " " + response);
 				try {
 					if (LiteService._isFunction(options.error)) {
 						options.error(response, event);
@@ -126,7 +126,7 @@ class _LiteAce {
 					LiteAce.logger.error(e);
 				} finally {
 					top.hideSpinner();
-					LiteAce.error(statusText);
+					LiteAce.error(response);
 				}
 			}
 		});
@@ -161,7 +161,7 @@ class _LiteAce {
 				}
 			},
 			error: function(response, event, statusText) {
-				LiteAce.logger.error(statusText);
+				LiteAce.logger.error(statusText + " " + response);
 				try {
 					if (LiteService._isFunction(options.error)) {
 						options.error(response, event);
@@ -170,7 +170,7 @@ class _LiteAce {
 					LiteAce.logger.error(e);
 				} finally {
 					top.hideSpinner();
-					LiteAce.error(statusText);
+					LiteAce.error(response);
 				}
 			}
 		});

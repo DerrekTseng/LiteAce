@@ -86,7 +86,9 @@ LiteAce.table = function(option = {}) {
 	thead.forEach(function(theadItem, index) {
 		buffer.push("<th ");
 		if (theadItem.class) {
-			buffer.push("class='" + theadItem.class + "' ");
+			buffer.push("class='none-select " + theadItem.class + "' ");
+		} else {
+			buffer.push("class='none-select' ");
 		}
 		if (theadItem.width) {
 			buffer.push("width='" + theadItem.width + "' ");
@@ -489,7 +491,9 @@ LiteAce.pageTable = function(option = {}) {
 	thead.forEach(function(theadItem) {
 		buffer.push("<th ");
 		if (theadItem.class) {
-			buffer.push("class='" + theadItem.class + "' ");
+			buffer.push("class='none-select " + theadItem.class + "' ");
+		} else {
+			buffer.push("class='none-select' ");
 		}
 		if (theadItem.width) {
 			buffer.push("width='" + theadItem.width + "' ");
@@ -618,6 +622,8 @@ LiteAce.pageTable = function(option = {}) {
  * 
  * url = 後端 post 的 Controller
  *
+ * orderby = 預設初始排序，範例: "key asc" 或 "key desc"
+ *
  * pageSize = Integer 型別，設定分頁單頁資料的筆數，未設定則預設 10
  * pageNum = Integer 型別，設定頁次，，未設定則預設 1 ，如有輸入則頁次必須 >= 1     
  * 	 
@@ -656,7 +662,7 @@ LiteAce.fetchTable = function(option = {}) {
 	let titleLeft = option.titleLeft || "";
 	let titleRight = option.titleRight || "";
 	let titlefinish = option.titlefinish || null;
-
+	let orderby = option.orderby || "";
 
 	$table.empty();
 
@@ -667,8 +673,7 @@ LiteAce.fetchTable = function(option = {}) {
 		pageSize: pageSize,
 		pageCount: 0,
 		totalCount: 0,
-		orderby: "",
-		sortDir: "",
+		orderby: orderby,
 		treach: treach,
 		url: url,
 		page: function(pageNum, pageSize) {
@@ -744,7 +749,7 @@ LiteAce.fetchTable = function(option = {}) {
 						$('[data-page-previous]', $pager).removeClass("disabled");
 					}
 
-					if ($this.pageNum == $this.pageCount) {
+					if ($this.pageNum == $this.pageCount || $this.pageCount == 0) {
 						$('[data-page-next]', $pager).addClass("disabled");
 						$('[data-page-last]', $pager).addClass("disabled");
 					} else {
@@ -759,6 +764,7 @@ LiteAce.fetchTable = function(option = {}) {
 					if ($this.pageCount <= 1) {
 						$('[data-page-num]', $pager).addClass("disabled");
 						$pageSelect.addClass("disabled");
+						$pageSelect.append("<option value='1'>1</option>");
 						$pageSelect.attr("disabled", true);
 					} else {
 						$('[data-page-num]', $pager).removeClass("disabled");
@@ -813,7 +819,9 @@ LiteAce.fetchTable = function(option = {}) {
 	thead.forEach(function(theadItem) {
 		buffer.push("<th ");
 		if (theadItem.class) {
-			buffer.push("class='" + theadItem.class + "' ");
+			buffer.push("class='none-select " + theadItem.class + "' ");
+		} else {
+			buffer.push("class='none-select' ");
 		}
 		if (theadItem.width) {
 			buffer.push("width='" + theadItem.width + "' ");

@@ -157,7 +157,7 @@ class _LiteService {
 		let abort = options.abort || null;
 		let error = options.error || null;
 		let confirm = options.confirm || null;
-		
+
 		let $folder = document.createElement("input");
 		$folder.setAttribute("type", "file");
 		$folder.setAttribute("multiple", "multiple");
@@ -190,7 +190,7 @@ class _LiteService {
 			}
 
 			function _doUpload() {
-			
+
 				formdata.append("data", JSON.stringify(data));
 
 				ajax.addEventListener("load", function(event) {
@@ -427,27 +427,37 @@ class _LiteService {
 			}
 		}, '');
 	}
-	
+
 	// spring 專用轉換 會將原本巢狀式的資料 abc[a] 變成 abc.a 
-	_obj2FormData(obj, formData = new FormData()){
-	    function createFormData(obj, subKeyStr = ''){
-	        for(let i in obj){
-	            let value = obj[i];
-	            let subKeyStrTrans = subKeyStr ? subKeyStr + '.' + i : i;
-	            if(typeof(value) === 'string' || typeof(value) === 'number'){
-	                formData.append(subKeyStrTrans, value);
-	            } else if(typeof(value) === 'object'){
-	                createFormData(value, subKeyStrTrans);
-	            }
-	        }
-	    }
-	    createFormData(obj);
-	    return formData;
+	_obj2FormData(obj, formData = new FormData()) {
+		function createFormData(obj, subKeyStr = '') {
+			if (Array.isArray(obj)) {
+				obj.forEach(value => {
+					if (typeof (value) === 'string' || typeof (value) === 'number' || typeof (value) === 'boolean') {
+						formData.append(subKeyStr, value);
+					} else if (typeof (value) === 'object') {
+						createFormData(value, subKeyStrTrans);
+					}
+				});
+			} else {
+				for (let i in obj) {
+					let value = obj[i];
+					let subKeyStrTrans = subKeyStr ? subKeyStr + '.' + i : i;
+					if (typeof (value) === 'string' || typeof (value) === 'number' || typeof (value) === 'boolean') {
+						formData.append(subKeyStrTrans, value);
+					} else if (typeof (value) === 'object') {
+						createFormData(value, subKeyStrTrans);
+					}
+				}
+			}
+		}
+		createFormData(obj);
+		return formData;
 	}
 
 	// 當前日期時間字串 yyyy-MM-dd hh:mm:ss
-	currentDateTimeString(){
-		return new Date( new Date().getTime() -( new Date().getTimezoneOffset() * 60 * 1000) ).toISOString().split("T").join(' ').split('.')[0];
+	currentDateTimeString() {
+		return new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60 * 1000)).toISOString().split("T").join(' ').split('.')[0];
 	}
 
 }

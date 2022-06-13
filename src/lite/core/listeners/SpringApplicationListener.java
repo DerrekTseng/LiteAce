@@ -46,9 +46,6 @@ public class SpringApplicationListener implements ApplicationListener<Applicatio
 	private void configLogging() {
 		try {
 
-			// 啟用 JavaScript
-			System.setProperty("log4j2.Script.enableLanguages", "JavaScript");
-
 			// 載入 log4j2 的設定檔
 			loggerContext = Configurator.initialize(null, log4j2ConfigLocation.getFile().getAbsolutePath());
 

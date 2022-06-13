@@ -2,37 +2,27 @@
 <Configuration status="INFO">
 
 	<Properties>
-		<Property name="project">LitePlatform</Property>
+		<Property name="project">LiteCloud</Property>
 		<Property name="date">%d{yyyy-MM-dd}</Property>
 		<Property name="destination">${sys:catalina.base}/logs</Property>
 		
 		<Property name="pattern.web">[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%p] [%X{client}] (%F:%M:%L) - %m%n</Property>
 		<Property name="pattern.scheduler">[%d{yyy-MM-dd HH:mm:ss.SSS}] [%p] (%F:%M:%L) - %m%n</Property>
 		
-		<Property name="routing.init">
-			<![CDATA[
-				if(logEvent.getContextMap().containsKey("jobid")) {
-					 "scheduler";
-				} else {
-					 "web";
-				}
-			]]>
-		</Property>
 	</Properties>
 
 	<Appenders>
 	
 		<Routing name="ConsoleLogRouting">
-			<Routes>
-				<Script name="RoutingInit" language="JavaScript">${routing.init}</Script>
-				<Route key="web">
+			<Routes pattern="${ctx:jobid}">
+				<Route key="${ctx:jobid}"> <!-- 當key有值時 因為沒有設定 RoutingInit 所以不會使用此 Route 的 Appender -->
 					<Console name="WebConsoleLogRouting" target="SYSTEM_OUT">
 						<PatternLayout>
 							<Pattern>${pattern.web}</Pattern>
 						</PatternLayout>
 					</Console>
 				</Route>
-				<Route key="scheduler">
+				<Route>
 					<Console name="SchedulerConsoleLogRouting" target="SYSTEM_OUT">
 						<PatternLayout>
 							<Pattern>${pattern.scheduler}</Pattern>
@@ -43,9 +33,8 @@
 		</Routing>
 		
 		<Routing name="FileLogRouting">
-			<Routes>
-				<Script name="RoutingInit" language="JavaScript">${routing.init}</Script>
-				<Route key="web">
+			<Routes pattern="${ctx:jobid}">
+				<Route key="${ctx:jobid}"> <!-- 當key有值時 因為沒有設定 RoutingInit 所以不會使用此 Route 的 Appender -->
 					<RollingFile name="WebFileLogRouting"
 						immediateFlush="true"
 						fileName="${destination}/${project}.log"
@@ -63,17 +52,22 @@
 						</DefaultRolloverStrategy>
 					</RollingFile>
 				</Route>
-				<Route key="scheduler">
+				<Route>
 					<RollingFile name="SchedulerFileLogRouting" 
 						immediateFlush="true"
-						fileName="${destination}/${ctx:jobid}.log" 
-						filePattern="${destination}/${ctx:jobid}.${date}.log">
+						fileName="${destination}/jobs/${ctx:jobid}.log" 
+						filePattern="${destination}/jobs/${ctx:jobid}.${date}.log">
 						<PatternLayout>
 							<Pattern>${pattern.scheduler}</Pattern>
 						</PatternLayout>
 						<Policies>
 							<TimeBasedTriggeringPolicy />
 						</Policies>
+						<DefaultRolloverStrategy>
+							<Delete basePath="${destination}/jobs/" maxDepth="1">
+								<IfLastModified age="P30D" />
+							</Delete>
+						</DefaultRolloverStrategy>
 					</RollingFile>
 				</Route>
 			</Routes>

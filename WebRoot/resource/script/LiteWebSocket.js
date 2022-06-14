@@ -32,11 +32,11 @@ class LiteWebSocket {
 		this.onError = option.onError || function() { };
 		this.onClose = option.onClose || function() { };
 		this.retry = option.retry;
-		
-		if(isNaN(this.retry)){
+
+		if (isNaN(this.retry)) {
 			this.retry = 5;
 		}
-		
+
 		this.initialized = true;
 		this.sendStacks = [];
 		this.protocol = top.window.location.protocol.replace('http', 'ws');
@@ -47,14 +47,14 @@ class LiteWebSocket {
 		this.isOpening = false;
 		this.isOpened = false;
 		this.websocket = null;
-		
+
 		this.logName;
-		if(this.name){
+		if (this.name) {
 			this.logName = " '" + this.name + "' ";
 		} else {
 			this.logName = "";
 		}
-		
+
 		this._create();
 	}
 
@@ -68,7 +68,16 @@ class LiteWebSocket {
 
 		let $this = this;
 
-		this.websocket = new WebSocket(this.connectionString);
+
+		if ('WebSocket' in window) {
+			this.websocket = new WebSocket(this.connectionString);
+		} else if ('MozWebSocket' in window) {
+			this.websocket = new MozWebSocket(this.connectionString);
+		} else {
+			this.isOpening = false;
+			this.initialized = false;
+			throw "WebSocket is not supported by this browser.";
+		}
 
 		this.websocket.addEventListener('open', event => {
 
@@ -106,7 +115,7 @@ class LiteWebSocket {
 		this.websocket.addEventListener('close', event => {
 			this.isOpened = false;
 			if (!$this.isOpening) {
-				if($this.retry != 0){
+				if ($this.retry != 0) {
 					window.setTimeout(() => {
 						if (!$this.isOpening) {
 							$this._create();
@@ -127,8 +136,8 @@ class LiteWebSocket {
 			throw "Connection closed";
 		}
 		let dataString;
-		
-		if(data === null){
+
+		if (data === null) {
 			dataString = "{}";
 		} else if (typeof data === "undefined") {
 			dataString = "{}";
@@ -175,7 +184,7 @@ LiteAce.ws._onMessage = function(responseBean) {
 	let data = responseBean.data;
 	if (LiteAce.ws._receivers.has(url)) {
 		let receiverCallback = LiteAce.ws._receivers.get(url);
-		if(LiteAce._isFunction(receiverCallback)){
+		if (LiteAce._isFunction(receiverCallback)) {
 			receiverCallback(data);
 		}
 	}
@@ -183,7 +192,7 @@ LiteAce.ws._onMessage = function(responseBean) {
 
 LiteAce.ws._onOpen = function() {
 	LiteAce.ws._connection.send({
-		action : 'register',
+		action: 'register',
 		urls: Array.from(LiteAce.ws._receivers.keys()).join(",")
 	});
 };
@@ -197,7 +206,7 @@ LiteAce.ws._defaultClosedConnection = {
 	send: function() {
 		throw "connection not initialized";
 	}
-}; 
+};
 
 LiteAce.ws._connection = LiteAce.ws._defaultClosedConnection;
 
@@ -216,7 +225,7 @@ LiteAce.ws.addReceiver = function(url = "", callback = function() { }) {
 	}
 	LiteAce.ws._receivers.set(url, callback);
 	LiteAce.ws._connection.send({
-		action : 'register',
+		action: 'register',
 		urls: url
 	});
 }
@@ -233,7 +242,7 @@ LiteAce.ws.send = function(url = "", data = {}) {
 		throw "url not exists in receivers.";
 	}
 	LiteAce.ws._connection.send({
-		action : 'msg',
+		action: 'msg',
 		url: url,
 		data: data
 	});
@@ -255,15 +264,15 @@ LiteAce.ws.open = function() {
 	if (LiteAce.ws._connection.initialized) {
 		throw "connection is already initialized";
 	}
-	
+
 	LiteAce.ws._receivers.clear();
 
 	LiteAce.ws._connection = new LiteWebSocket({
 		name: "defalut-connection",
 		url: "ws",
 		onMessage: LiteAce.ws._onMessage,
-		onOpen : LiteAce.ws._onOpen,
-		retry : 0
+		onOpen: LiteAce.ws._onOpen,
+		retry: 0
 	});
-	
+
 }

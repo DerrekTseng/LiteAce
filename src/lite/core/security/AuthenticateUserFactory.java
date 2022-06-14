@@ -25,6 +25,7 @@ public class AuthenticateUserFactory {
 
 	public static final String TOKEN_KEY_NAME = "authorization";
 
+	/** JWT 的密碼，必須要是Base64後的字串 */
 	private static final String secret = "MTIz";
 
 	private static final ConcurrentHashMap<String, String> tokenCache = new ConcurrentHashMap<String, String>();
@@ -89,7 +90,16 @@ public class AuthenticateUserFactory {
 
 	public AuthenticateUser getAuthenticateUser(HttpServletRequest request) {
 		String token = getToken(request);
-		return parseAuthenticateUser(token);
+		AuthenticateUser authenticateUser = parseAuthenticateUser(token);
+		if (authenticateUser != null) {
+			if (authenticateUser.getIp().equals(HttpTools.getIP(request))) {
+				return authenticateUser;
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
 	}
 
 	public AuthenticateUser getAuthenticateUser() {

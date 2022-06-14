@@ -61,9 +61,9 @@ public class AuthenticateProcessingFilter extends AbstractAuthenticationProcessi
 		ThreadContext.put("client", ip + " | " + authenticateUser.getName());
 
 		if (authenticateUserFactory.isCached(authenticateUser.getUuid(), authenticateUser.getIp())) {
-			
+
 			// 登入成功
-			
+
 		} else {
 			throw new NonceExpiredException("Token expired");
 		}
@@ -76,7 +76,13 @@ public class AuthenticateProcessingFilter extends AbstractAuthenticationProcessi
 		SecurityContext context = SecurityContextHolder.getContext();
 		context.setAuthentication(authResult);
 		chain.doFilter(request, response);
-		ThreadContext.clearMap();
+		ThreadContext.clearAll();
+	}
+
+	@Override
+	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+		super.unsuccessfulAuthentication(request, response, failed);
+		ThreadContext.clearAll();
 	}
 
 }

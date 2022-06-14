@@ -214,6 +214,8 @@ LiteAce.dialog = function(option = {}) {
 	$('[data-ace-dialog-title]', $dialog).html(title);
 
 	$('[data-ace-dialog-icon]', $dialog).attr('class', icon);
+	
+	$('[data-ace-dialog-icon]', $dialog).attr('style', "margin-right: 8px");
 
 	$content.css({
 		width: width,

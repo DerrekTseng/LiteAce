@@ -6,8 +6,8 @@
 <meta name="description" content="overview &amp; stats" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
-<link rel="icon" href="<c:url value='/resource/icon/litecloud.ico' />" type="image/x-icon" />
-<link rel="shortcut icon" href="<c:url value='/resource/icon/litecloud.ico' />" type="image/x-icon" />
+<link rel="icon" href="<c:url value='/favicon.ico' />" type="image/x-icon" />
+<link rel="shortcut icon" href="<c:url value='/favicon.ico' />" type="image/x-icon" />
 
 <link rel="stylesheet" href="<c:url value='/resource/lib/merged-resources.min.css' />" />
 <link rel="stylesheet" href="<c:url value='/resource/assets/css/ace.min.css' />" class="ace-main-stylesheet" id="main-ace-style" />

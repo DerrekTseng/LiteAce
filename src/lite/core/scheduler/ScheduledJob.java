@@ -91,6 +91,8 @@ public abstract class ScheduledJob implements Job {
 			// 要 update 資料庫 當作[結束執行]的紀錄
 
 			scheduledFactory.setRunning(id, false);
+			
+			ThreadContext.clearAll();
 		}
 	}
 

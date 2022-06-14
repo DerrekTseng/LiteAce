@@ -27,11 +27,29 @@
         <property name="password"> 
              <value>${mysql.password}</value>  
         </property> 
-     </bean> 
+	</bean> 	
+     
+	<!-- 連線池設定 -->
+	<bean id="mysql_dataSourceConnectionFactoryBean" class="org.apache.commons.dbcp2.DataSourceConnectionFactory">
+		<constructor-arg ref="mysql_dataSource"/>
+	</bean>
+	   
+	<bean id="mysql_poolableConnectionFactoryBean" class="org.apache.commons.dbcp2.PoolableConnectionFactory">
+		<constructor-arg index="0" ref="mysql_dataSourceConnectionFactoryBean"/>
+		<constructor-arg index="1"><null/></constructor-arg>
+	</bean>
+	   
+	<bean id="mysql_genericObjectPoolBean" class="org.apache.commons.pool2.impl.GenericObjectPool">
+		<constructor-arg ref="mysql_poolableConnectionFactoryBean"/>
+	</bean>
+	   
+	<bean id="mysql_poolingDataSourceBean" class="org.apache.commons.dbcp2.PoolingDataSource">
+		<constructor-arg ref="mysql_genericObjectPoolBean"/>
+	</bean>
 	
 	<!-- myBatis 設定 -->
 	<bean id="mysql_sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="mysql_dataSource" />
+		<property name="dataSource" ref="mysql_poolingDataSourceBean" />
 		<property name="configLocation" value="/WEB-INF/mybatis-configuration.xml" />  	<!-- mybatis 參數檔 -->
 		<property name="mapperLocations">		<!-- mybats sql xml 存放路徑 -->
 			<list>

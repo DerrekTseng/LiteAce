@@ -14,7 +14,7 @@
 	</bean>
 	
 	<!-- 連線資訊 -->
-    <bean id="mysql_dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"> 
+    <bean id="mysql_dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"> 
         <property name="driverClassName"> 
             <value>net.sf.log4jdbc.sql.jdbcapi.DriverSpy</value> 
         </property> 
